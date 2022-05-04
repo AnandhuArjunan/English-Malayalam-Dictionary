@@ -1,4 +1,4 @@
-# gradle-javafx-hello-world-app
+# English-Malayalam-Dictionary
 
 A English to Malayalam Dictionary App using JavaFX 14.
 
