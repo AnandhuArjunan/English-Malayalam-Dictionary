@@ -1,6 +1,6 @@
 # English-Malayalam-Dictionary
 
-A English to Malayalam Dictionary App using JavaFX 14.
+A English to Malayalam Dictionary App using JavaFX.
 
 ## Gradle Commands
 run in place:
