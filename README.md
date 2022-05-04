@@ -15,4 +15,4 @@ Build a distribution zip in `build/distributions`:
 ## Dependencies:
   * [Open JDK 14](https://adoptopenjdk.net/?variant=openjdk14&jvmVariant=hotspot)
   * [Gradle 6.3](https://gradle.org/install/)
-  * JavaFX 14 (Will be downloaded by Gradle)
+  * JavaFX 14 libs (Will be downloaded by Gradle)
