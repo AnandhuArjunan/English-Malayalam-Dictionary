@@ -1,4 +1,4 @@
-package fi.pelam.gradlejavafxhelloworldapp;
+package com.anandhuarjunan.englishmalayalam.dictionary.app;
 
 import javafx.application.Application;
 import javafx.stage.Stage;

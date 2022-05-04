@@ -1,5 +1,5 @@
-module fi.pelam.gradlejavafxhelloworldapp {
+module fi.pelam.com.anandhuarjunan.englishmalayalam.dictionary.app {
     requires javafx.controls;
     requires javafx.graphics;
-    exports fi.pelam.gradlejavafxhelloworldapp;
+    exports com.anandhuarjunan.englishmalayalam.dictionary.app;
 }
