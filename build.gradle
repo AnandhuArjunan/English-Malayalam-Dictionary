@@ -25,7 +25,10 @@ javafx {
 }
 // https://mvnrepository.com/artifact/com.jfoenix/jfoenix
 dependencies {
-    implementation 'com.jfoenix:jfoenix:9.0.1'
+    implementation 'com.jfoenix:jfoenix:9.0.10'
+// https://mvnrepository.com/artifact/com.opencsv/opencsv
+    implementation 'com.opencsv:opencsv:5.6'
+
 }
 
 repositories {
