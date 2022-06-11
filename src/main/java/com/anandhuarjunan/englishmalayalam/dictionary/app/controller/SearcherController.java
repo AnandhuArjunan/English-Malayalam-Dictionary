@@ -18,7 +18,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import com.opencsv.CSVReader;
 
 
 public class SearcherController implements Initializable {
@@ -85,21 +84,17 @@ public class SearcherController implements Initializable {
 
 		@Override
 		public void initialize( URL url , ResourceBundle resourceBundle ) {
-			//Build reader instance
-
-			CSVReader reader = null;
-			try {
-				reader = new CSVReader(new FileReader("data.csv"), ',', '"', 1);
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
-
-			//Read all rows at once
-			List<String[]> allRows = reader.readAll();
-
-			//Read CSV line by line and use the string array as you want
-			for(String[] row : allRows){
-				System.out.println(Arrays.toString(row));
-			}
+			/*
+			 * //Build reader instance
+			 * 
+			 * CSVReader reader = null; try { reader = new CSVReader(new
+			 * FileReader("data.csv"), ',', '"', 1); } catch (FileNotFoundException e) {
+			 * e.printStackTrace(); }
+			 * 
+			 * //Read all rows at once List<String[]> allRows = reader.readAll();
+			 * 
+			 * //Read CSV line by line and use the string array as you want for(String[] row
+			 * : allRows){ System.out.println(Arrays.toString(row)); }
+			 */
 		}
 }
