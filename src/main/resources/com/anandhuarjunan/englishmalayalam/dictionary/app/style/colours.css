@@ -1,0 +1,20 @@
+*{
+
+	-dark:#388e3c;
+	-light:#9ccc65;
+
+	-app-bg-gradient : linear-gradient(to top right,-dark, -light);
+
+
+	-searchbox :  -light;
+	-searchboxeffect :  dropshadow(three-pass-box, -dark, 15, 0, 0, 2) ;
+    -searchtext :black;
+    -searchboxpromt :black;
+
+	-listcelltext :  -dark;
+	-listcellselected:linear-gradient(to bottom left, -dark, #9ccc65);
+
+    -dataviewtext :-listcelltext;
+
+    -exitbuttonbg:-light;
+}

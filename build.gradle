@@ -15,7 +15,7 @@ plugins {
 sourceCompatibility = 14
 targetCompatibility = 14
 
-version = '0.0.2'
+version = '0.0.1'
 group = 'com.anandhuarjunan.englishmalayalam.dictionary'
 mainClassName = "$moduleName/com.anandhuarjunan.englishmalayalam.dictionary.app.Main"
 
@@ -24,10 +24,7 @@ javafx {
     version = "14"
     modules = [ 'javafx.controls', 'javafx.fxml' , 'javafx.web']
 }
-// https://mvnrepository.com/artifact/com.jfoenix/jfoenix
 dependencies {
-    implementation 'com.jfoenix:jfoenix:9.0.10'
-// https://mvnrepository.com/artifact/com.opencsv/opencsv
     implementation 'com.opencsv:opencsv:5.6'
 
 }
