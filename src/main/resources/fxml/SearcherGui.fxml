@@ -14,7 +14,6 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-
 <AnchorPane xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.anandhuarjunan.englishmalayalam.dictionary.app.controller.SearcherController">
    <children>
       <BorderPane layoutX="11.600000381469727" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -55,7 +54,7 @@
                               <Tooltip text="Clear" />
                            </tooltip>
                         </Button>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="clear" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../icons/icons8_cancel_30px.png" />
                            </image>
@@ -65,7 +64,7 @@
                         <Insets bottom="2.0" left="5.0" right="2.0" top="2.0" />
                      </padding>
                   </HBox>
-                        <ListView fx:id="listResults" nodeOrientation="LEFT_TO_RIGHT" onMouseClicked="#handleMouseClickAWord" styleClass="list-cell" stylesheets="@../style/style.css" VBox.vgrow="ALWAYS" />
+                        <ListView fx:id="listResults" nodeOrientation="LEFT_TO_RIGHT" styleClass="list-cell" stylesheets="@../style/style.css" VBox.vgrow="ALWAYS" />
                </children>
                <padding>
                   <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
@@ -73,7 +72,7 @@
             </VBox>
          </left>
          <center>
-            <TextArea prefHeight="200.0" prefWidth="200.0" styleClass="list-cell" stylesheets="@../style/style.css" BorderPane.alignment="CENTER">
+            <TextArea fx:id="explanation" editable="false" prefHeight="200.0" prefWidth="200.0" styleClass="list-cell" stylesheets="@../style/style.css" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                </BorderPane.margin>

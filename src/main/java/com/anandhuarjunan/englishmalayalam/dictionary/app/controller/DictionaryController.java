@@ -16,14 +16,25 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class DictionaryController implements Initializable {
+
+	private AnchorPane searchUi = null;
+
 	@Override
 	public void initialize( URL url , ResourceBundle resourceBundle ) {
+
+		try {
+			searchUi = FXMLLoader.load(getClass().getResource("/fxml/SearcherGui.fxml"));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+
+		showSearchUI();
 
 		// set on click
 		searchWordBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle( ActionEvent event ) {
-				showComponent("/fxml/SearcherGui.fxml");
+				showSearchUI();
 			}
 		});
 		addWordBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -42,7 +53,6 @@ public class DictionaryController implements Initializable {
 		tooltip1.setShowDelay(Duration.seconds(0.5));
 		tooltip2.setShowDelay(Duration.seconds(0.5));
 		tooltip3.setShowDelay(Duration.seconds(0.5));
-		showComponent("/fxml/SearcherGui.fxml");
 		// close app
 		closeBtn.setOnMouseClicked(e -> {
 			System.exit(0);
@@ -51,7 +61,7 @@ public class DictionaryController implements Initializable {
 
 	private void setNode( Node node ) {
 		container.getChildren().clear();
-		container.getChildren().add((Node) node);
+		container.getChildren().add(node);
 		AnchorPane.setBottomAnchor(node, 0.0);
 		AnchorPane.setLeftAnchor(node, 0.0);
 		AnchorPane.setRightAnchor(node, 0.0);
@@ -65,6 +75,11 @@ public class DictionaryController implements Initializable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private void showSearchUI() {
+
+			setNode(searchUi);
 	}
 
 	@FXML

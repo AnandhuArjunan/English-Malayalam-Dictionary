@@ -1,6 +1,8 @@
 package com.anandhuarjunan.englishmalayalam.dictionary.app.controller;
 
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -8,70 +10,53 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.tuple.Pair;
+
+import com.anandhuarjunan.englishmalayalam.dictionary.app.Main;
+import com.opencsv.CSVParser;
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
+import com.opencsv.exceptions.CsvException;
 
 
 public class SearcherController implements Initializable {
 
-
-
-
-	// click search button
-	@FXML
-	private void handleOnKeyTyped() {
-
-	}
-
-	// click a word in word list is found
-	@FXML
-	private void handleMouseClickAWord( MouseEvent arg0 ) {
-		// search binary
-
-	}
-
-	@FXML
-	private void handleClickEditBtn() {
-
-	}
-	@FXML
-	private void handleClickSoundBtn() {
-
-	}
-
-	@FXML
-	private void handleClickSaveBtn() {
-
-	}
-
-	@FXML
-	private void handleClickDeleteBtn() {
-
-	}
-
-	private void refreshAfterDeleting() {
-
-	}
-	private void setListDefault(int index){
-
-	}
 	// FXML elements
 	@FXML
 	private TextField searchTerm;
 
-	@FXML
-	private Button  cancelBtn, saveBtn, volumeBtn;
-
-	@FXML
-	private Label englishWord, headerList, notAvailableAlert;
+    @FXML
+    private ImageView clear;
 
 	@FXML
 	private TextArea explanation;
@@ -82,19 +67,149 @@ public class SearcherController implements Initializable {
 	@FXML
 	private Pane headerOfExplanation;
 
+	private List<String[]>	allData = null;
+	private Set<String> setOfWords = null;
+
 		@Override
 		public void initialize( URL url , ResourceBundle resourceBundle ) {
-			/*
-			 * //Build reader instance
-			 * 
-			 * CSVReader reader = null; try { reader = new CSVReader(new
-			 * FileReader("data.csv"), ',', '"', 1); } catch (FileNotFoundException e) {
-			 * e.printStackTrace(); }
-			 * 
-			 * //Read all rows at once List<String[]> allRows = reader.readAll();
-			 * 
-			 * //Read CSV line by line and use the string array as you want for(String[] row
-			 * : allRows){ System.out.println(Arrays.toString(row)); }
-			 */
+			try {
+				addEventHandlers();
+				getDictionaryData();
+				fillListWithUniqueWords();
+				findPartOfSpeech();
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			} catch (CsvException e) {
+				e.printStackTrace();
+			}
+
+
 		}
+
+
+		private void findPartOfSpeech() {
+			listResults.getSelectionModel().selectedItemProperty().addListener((ob,old,newV)->{
+	        	if(Objects.nonNull(newV)) {
+	        		explanation.clear();
+
+	        		 List<String[]> found = filterWithFullData(newV);
+
+		        	  List<String> nouns = new ArrayList<>();
+		        	  List<String> adjective = new ArrayList<>();
+		        	  List<String> idiom = new ArrayList<>();
+		        	  List<String> verb = new ArrayList<>();
+		        	  List<String> phrases = new ArrayList<>();
+		        	  List<String> adverb = new ArrayList<>();
+		        	  List<String> other = new ArrayList<>();
+
+		        	   groupResultBasedOnPartOfSpeech(found,
+		        			   Pair.of("idm", idiom),
+		        			   Pair.of("n", nouns),
+		        			   Pair.of("a", adjective),
+		        			   Pair.of("v", verb),
+		        			   Pair.of("phr", phrases),
+		        			   Pair.of("adv", adverb),
+		        			   Pair.of("-", other));
+
+		        	   showResultToTextArea(Pair.of("Nouns", nouns),
+		        			   Pair.of("Adjectives", adjective),
+		        			   Pair.of("Adverb", adverb),
+		        			   Pair.of("Phrases", phrases),
+		        			   Pair.of("Verb", verb),
+		        			   Pair.of("Idiom", idiom),
+		        			   Pair.of("-----", other));
+
+	        	}
+
+	        });
+
+		}
+
+
+		@SafeVarargs
+		private void groupResultBasedOnPartOfSpeech(List<String[]> data,Pair<String, List<String>> ...pofDataPairs) {
+
+			data.forEach(str->{
+
+				for(Pair<String, List<String>> pofDataPair: pofDataPairs) {
+					if(str[2].equalsIgnoreCase(pofDataPair.getLeft())) {
+		        		pofDataPair.getRight().add(str[3]);
+		        	}
+				}
+
+
+
+		        });
+		}
+
+
+		@SafeVarargs
+		private void showResultToTextArea(Pair<String, List<String>> ...pairs) {
+
+				for(Pair<String, List<String>> pair : pairs) {
+					if(!pair.getRight().isEmpty()) {
+						explanation.setText(explanation.getText()+"\n"+pair.getLeft());
+						 pair.getRight().forEach(n->explanation.setText(explanation.getText()+"\n"+"- "+n));
+					}
+
+				}
+		}
+
+
+		 private List<String[]> filterWithFullData(String newV) {
+			 List<String[]> found = new ArrayList<>();
+      	   allData.forEach(str->{
+		        	if(str[1].equalsIgnoreCase(newV)) {
+		        		found.add(str);
+		        	}
+		        });
+      	   return found;
+		}
+
+		private void fillListWithUniqueWords() {
+			  setOfWords  = new TreeSet<>();
+		        allData.forEach(str->
+		        	setOfWords.add(str[1])
+		        );
+		        listResults.getItems().addAll(setOfWords);
+
+
+		}
+
+		private void addEventHandlers() {
+				searchTerm.textProperty().addListener((obs, oldText, newText)->onSearch(newText)); //Search Action
+				clear.setOnMouseClicked(ev->searchTerm.clear());
+
+		}
+
+		 private void getDictionaryData() throws IOException, URISyntaxException, CsvException {
+				try(FileReader filereader = new FileReader(new File(Main.class.getResource("/data/olam-enml.csv").toURI()),StandardCharsets.UTF_8);) {
+
+			        CSVParser parser = new CSVParserBuilder().withSeparator('\t').build();
+			        CSVReader csvReader = new CSVReaderBuilder(filereader)
+			                                  .withCSVParser(parser).withSkipLines(1)
+			                                  .build();
+			        allData = csvReader.readAll();
+			        }
+		 }
+
+		private void onSearch(String newText) {
+			 if(null != newText && !newText.isEmpty()) {
+				  Set<String> filterdSortedSet = setOfWords.stream().filter(predicate->predicate.toLowerCase().startsWith(newText.toLowerCase())).collect(Collectors.toSet());
+				  addToListview(filterdSortedSet);
+				  }
+				  else {
+					  addToListview(setOfWords);
+				  }
+		}
+
+		public void addToListview(Collection<String> collection) {
+		    	if(null != listResults) {
+		    		listResults.getItems().clear();
+		    		listResults.getItems().addAll(collection);
+		    	}
+		    }
 }
